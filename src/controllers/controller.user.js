@@ -42,7 +42,16 @@ async function addUser(req, res) {
   });
 }
 
+// at the end this function of delete user, this redirect user /
+// recive a id in parms
+// find a user and return the id
+async function deleteUser(id) {
+  await User.remove({ id });
+}
+
 module.exports = {
   getAllUser,
   getOneUser,
+  addUser,
+  deleteUser,
 };
