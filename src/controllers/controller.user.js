@@ -1,5 +1,21 @@
 const User = require("../models/user");
 
+// if id exits find a new number ramdom
+// else id no exits in databse create a new user using that id
+function compareIds(id) {
+  await User.findOne({ id }, (err, user) => {
+    try {
+      if (user) {
+        console.log("user exits");
+        compareIds(Math.floor(Math.random() * 10000));
+      }
+      return id;
+    } catch (e) {
+      console.log(e);
+    }
+  });
+}
+
 async function getAllUser(req, res) {
   await User.find({}, (err, user) => {
     try {
@@ -33,13 +49,22 @@ async function addUser(req, res) {
     gender,
   } = req.body;
 
-  // create a funtion to compare id in databse
-  // if id exits find a new number ramdom
-  // else id no exits in databse create a new user using that id
+  let id = compareIds(Math.floor(Math.random() * 10000));
 
-  let User = new User({
+  let newUser = new User({
     // agregate id and more data to created a new user
+    id,
+    firts_name,
+    last_name,
+    email,
+    money,
+    type_credit_card,
+    credit_card,
+    password,
+    gender,
   });
+  await newUser.save();
+  res.json(newUser);
 }
 
 // at the end this function of delete user, this redirect user /
