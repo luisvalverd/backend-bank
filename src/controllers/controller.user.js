@@ -2,7 +2,7 @@ const User = require("../models/user");
 
 // if id exits find a new number ramdom
 // else id no exits in databse create a new user using that id
-function compareIds(id) {
+async function compareIds(id) {
   await User.findOne({ id }, (err, user) => {
     try {
       if (user) {
@@ -10,8 +10,8 @@ function compareIds(id) {
         compareIds(Math.floor(Math.random() * 10000));
       }
       return id;
-    } catch (e) {
-      console.log(e);
+    } catch {
+      console.log(err);
     }
   });
 }
@@ -37,11 +37,10 @@ async function getOneUser(req, res) {
 }
 
 async function addUser(req, res) {
-  let {
+  const {
     firts_name,
     last_name,
     email,
-    ip_address,
     money,
     type_credit_card,
     credit_card,
@@ -74,9 +73,44 @@ async function deleteUser(id) {
   await User.remove({ id });
 }
 
+// this function is use to find a user with her email
+async function findUser(req, res) {
+	const {email} = req.body;
+	await User.findOne({ email }, (err, user) => {
+			res.json(user);
+			console.log(err);
+	});
+}
+
+// this function is use to update data user
+async function updateUser(req, res) {
+	const id = req.parms.id;
+	// save data user
+	const user = await User.findOne( { id } );	
+	// delete user
+	await User.remove( { id } );
+	// modify data users
+	user.firts_name = req.body.firts_name;
+	user.last_name = req.body.last_name;
+	user.credit_card = req.body.credit_card;
+	user.type_credit_card = req.body.type_credit_card;
+	await user.save();
+	res.json({message: "user update successfully"});
+}
+
 module.exports = {
   getAllUser,
   getOneUser,
   addUser,
   deleteUser,
+	findUser,
+	updateUser,
 };
+
+
+
+
+
+
+
+

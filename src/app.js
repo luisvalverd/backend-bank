@@ -6,7 +6,7 @@ const router = require("./routers/index.router");
 require("./database");
 
 // settings
-app.set("port", process.env.PORT);
+app.set("port", 3000 || process.env.PORT);
 
 // middlewares
 app.use(morgan("dev"));
