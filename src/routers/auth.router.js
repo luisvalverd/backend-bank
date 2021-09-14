@@ -1,10 +1,16 @@
 const { Router } = require("express");
 const router = Router();
+const passport = require('passport');
+require('../controllers/controller.auth');
 
-router.post("/login", (req, res) => {
-  // login user created
-});
+router.post("/login", passport.authenticate('login', {
+	successMessage: 'ok',
+	failureMessage: 'fail',
+	passReqToCallback: true
+}));
 
 router.post("/register", (req, res) => {
-  // register new user
+	res.json({message: "ok"});
 });
+
+module.exports = router;
