@@ -11,9 +11,9 @@ passport.use('login', new LocalStrategy( {
 		User.findOne({email: username}, (err, user) => {
 			if(user) {
 				if (password === user.password) {
-					return done(null, user);
+					return done(null, user, req.flash('success', 'user logged in successfully'));
 				}
-				return done(null, false);
+				return done(null, false, req.flash('error', 'fail in logged user'));
 			}
 		}); 
 	}
@@ -42,13 +42,13 @@ passport.use('register', new LocalStrategy({
 							gender,
 						});
 						await newUser.save();
-						return done(null, newUser);
+						return done(null, newUser, req.flash('success', 'user register in successfully'));
 					}
-					return done(null, false);
+					return done(null, false, req.flash('error', 'fail register user'));
 				}
-				return done(null, false);
+				return done(null, false, req.flash('error', 'fail register user'));
 			}
-			return done(null, false);
+			return done(null, false, req.flash('error', 'fail register user'));
 		});
 	}
 ));
@@ -58,7 +58,6 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
-	console.log(id);
 	User.findOne({id}, (err, user) => {
 		done(null, user);
 	});

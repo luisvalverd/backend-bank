@@ -26,15 +26,20 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-app.use((req, res, next) => {
-	app.locals.error = req.flash('error');
-	app.locals.success = req.flash('success');
-	next();
-});
 
 // routers
 app.use("/api", router);
 app.use('/api', routerAuth);
+
+// routers errors
+app.get('/error', (req, res, next) => {
+	res.json({message: req.flash('error'), fail: true});
+});
+
+app.get('/success', (req, res, next) => {
+	res.json({message: req.flash('success'), fail: false});
+});
+
 
 // initialization
 app.listen(app.get("port"), () => {
