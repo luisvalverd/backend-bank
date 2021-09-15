@@ -11,7 +11,7 @@ const User = new Schema({
     unique: false,
     require: true,
   },
-  lsat_name: {
+  last_name: {
     type: String,
     unique: false,
     require: true,
@@ -20,11 +20,6 @@ const User = new Schema({
     type: String,
     unique: true,
     require: true,
-  },
-  ip_address: {
-    type: String,
-    unique: true,
-    require: false,
   },
   money: {
     type: String,

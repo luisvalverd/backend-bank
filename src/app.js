@@ -8,6 +8,8 @@ const routerAuth = require('./routers/auth.router');
 const {urlencoded, json} = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const passport = require('passport');
+const flash = require('connect-flash');
 
 // settings
 app.set("port", 3000 || process.env.PORT);
@@ -21,6 +23,14 @@ app.use(session({
 	resave: true,
 	saveUninitialized: true,
 }));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+app.use((req, res, next) => {
+	app.locals.error = req.flash('error');
+	app.locals.success = req.flash('success');
+	next();
+});
 
 // routers
 app.use("/api", router);

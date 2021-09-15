@@ -3,27 +3,16 @@ const User = require("../models/user");
 // if id exits find a new number ramdom
 // else id no exits in databse create a new user using that id
 async function compareIds(id) {
-  await User.findOne({ id }, (err, user) => {
-    try {
-      if (user) {
-        console.log("user exits");
-        compareIds(Math.floor(Math.random() * 10000));
-      }
-      return id;
-    } catch {
-      console.log(err);
-    }
-  });
+  const user = await User.findOne({ id }); 
+	if (user) {
+		await compareIds(Math.floor(Math.random() * 10000));
+	}
+	return id;
 }
 
 async function getAllUser(req, res) {
-  await User.find({}, (err, user) => {
-    try {
-      res.json(user);
-    } catch {
-      console.log(err);
-    }
-  });
+	const users = await User.find();
+	res.json(users);
 }
 
 async function getOneUser(req, res) {
@@ -34,36 +23,6 @@ async function getOneUser(req, res) {
       console.log(err);
     }
   });
-}
-
-async function addUser(req, res) {
-  const {
-    firts_name,
-    last_name,
-    email,
-    money,
-    type_credit_card,
-    credit_card,
-    password,
-    gender,
-  } = req.body;
-
-  let id = compareIds(Math.floor(Math.random() * 10000));
-
-  let newUser = new User({
-    // agregate id and more data to created a new user
-    id,
-    firts_name,
-    last_name,
-    email,
-    money,
-    type_credit_card,
-    credit_card,
-    password,
-    gender,
-  });
-  await newUser.save();
-  res.json(newUser);
 }
 
 // at the end this function of delete user, this redirect user /
@@ -84,27 +43,28 @@ async function findUser(req, res) {
 
 // this function is use to update data user
 async function updateUser(req, res) {
-	const id = req.parms.id;
+	const id = req.params.id;
 	// save data user
-	const user = await User.findOne( { id } );	
-	// delete user
-	await User.remove( { id } );
-	// modify data users
-	user.firts_name = req.body.firts_name;
-	user.last_name = req.body.last_name;
-	user.credit_card = req.body.credit_card;
-	user.type_credit_card = req.body.type_credit_card;
-	await user.save();
-	res.json({message: "user update successfully"});
+	User.findOne( { id },async (err, user) => {
+		let newUser = user;
+		newUser.firts_name = req.body.firts_name;
+		newUser.last_name = req.body.last_name; 
+		newUser.credit_card = req.body.credit_card; 
+		newUser.type_credit_card = req.body.type_credit_card;
+		await newUser.save();
+		res.json({message: "user update successfully"});
+
+	});	
+	
 }
 
 module.exports = {
   getAllUser,
   getOneUser,
-  addUser,
   deleteUser,
 	findUser,
 	updateUser,
+	compareIds,
 };
 
 
