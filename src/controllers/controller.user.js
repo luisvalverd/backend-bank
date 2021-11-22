@@ -35,9 +35,16 @@ async function deleteUser(id) {
 // this function is use to find a user with her email
 async function findUser(req, res) {
 	const {email} = req.body;
-	await User.findOne({ email }, (err, user) => {
-			res.json(user);
-			console.log(err);
+	User.findOne({ email }, (err, user) => {
+		try {
+			if (!user) {
+				return res.status(200).json({message: "user not fount", userFound: false});
+			}
+			const {firts_name, last_name, email, money} = user;
+			return res.status(200).json({firts_name, last_name, email, money, userFound: true});
+		}catch (e) {
+			return res.status(400).json(e.message);
+		}
 	});
 }
 

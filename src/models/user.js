@@ -22,7 +22,7 @@ const User = new Schema({
     require: true,
   },
   money: {
-    type: String,
+    type: Number,
     unique: false,
     require: true,
   },
@@ -46,6 +46,58 @@ const User = new Schema({
     unique: false,
     require: true,
   },
+  deposit_resived: [
+    {
+      email_user_resived: {
+        type: String,
+        require: true,
+      },
+      name_user_resived: {
+        type: String,
+        require: true,
+      },
+      lastname_user_resived: {
+        type: String,
+        require: true,
+      },
+      money_user_resived: {
+        type: Number,
+        require: true
+      },
+      date: {
+        type: Date,
+        default: Date.now
+      }
+    }
+  ],
+  deposits_made: [
+    {
+      email_user: {
+        type: String,
+        require: true,
+        unique: false,
+      },
+      name_user: {
+        type: String,
+        require: true,
+        unique: false
+      },
+      lastname_user: {
+        type: String,
+        require: true,
+        unique: false,
+      },
+      money_send: {
+        type: Number,
+        require: true,
+        unique: false
+      },
+      date: {
+        type: Date,
+        default: Date.now
+      }
+    }
+  ]
 });
 
 module.exports = model("User", User);
